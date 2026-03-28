@@ -1,0 +1,1053 @@
+/* ═══════════════════════════════════════════════════════════════
+   Print3D Calc — style.css
+   Tema: Industrial-Futurista com suporte a Dark/Light mode
+   Fontes: Syne (display) + DM Sans (body)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 1. CSS VARIABLES (tokens de design) ─────────────────────── */
+:root {
+  /* Cores base — Dark mode (padrão) */
+  --bg-page:        #0d0f14;
+  --bg-card:        #13161e;
+  --bg-card-alt:    #181c27;
+  --bg-input:       #1c2030;
+  --bg-input-focus: #202437;
+
+  --border:         #272c3e;
+  --border-focus:   #4f6ef7;
+
+  --text-primary:   #e8eaf2;
+  --text-secondary: #7b8098;
+  --text-muted:     #444a62;
+
+  --accent-blue:    #4f6ef7;
+  --accent-orange:  #f97316;
+  --accent-cyan:    #06b6d4;
+  --accent-purple:  #a78bfa;
+  --accent-green:   #34d399;
+
+  --final-bg:       linear-gradient(135deg, #1a1f33 0%, #1e1530 100%);
+  --final-border:   #a78bfa;
+  --final-value:    #c4b5fd;
+
+  --error-color:    #f87171;
+
+  --radius-sm:  6px;
+  --radius-md:  12px;
+  --radius-lg:  20px;
+
+  --shadow-card: 0 8px 40px rgba(0,0,0,.45);
+  --shadow-btn:  0 4px 20px rgba(79,110,247,.35);
+
+  --font-display: 'Syne', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+
+  --transition: .22s ease;
+}
+
+/* Light mode — sobrescreve os tokens */
+[data-theme="light"] {
+  --bg-page:        #f0f2f8;
+  --bg-card:        #ffffff;
+  --bg-card-alt:    #f7f8fc;
+  --bg-input:       #eef0f7;
+  --bg-input-focus: #e4e8f5;
+
+  --border:         #dde0ed;
+  --border-focus:   #4f6ef7;
+
+  --text-primary:   #1a1d2e;
+  --text-secondary: #5a607a;
+  --text-muted:     #a0a8c0;
+
+  --final-bg:       linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+  --final-border:   #7c3aed;
+  --final-value:    #5b21b6;
+
+  --shadow-card: 0 4px 24px rgba(0,0,0,.08);
+  --shadow-btn:  0 4px 16px rgba(79,110,247,.25);
+}
+
+/* ── 2. RESET & BASE ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-page);
+  color: var(--text-primary);
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.6;
+  transition: background var(--transition), color var(--transition);
+}
+
+/* Textura sutil no fundo (dark mode) */
+[data-theme="dark"] body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(ellipse 80% 60% at 70% 0%, rgba(79,110,247,.07) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 10% 90%, rgba(167,139,250,.06) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+em { font-style: normal; color: var(--accent-blue); }
+
+/* ── 3. HEADER ───────────────────────────────────────────────── */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(13,15,20,.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+
+[data-theme="light"] .site-header {
+  background: rgba(240,242,248,.85);
+}
+
+.header-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: -.01em;
+}
+
+.logo-icon {
+  font-size: 1.4rem;
+  color: var(--accent-blue);
+  animation: spinSlow 12s linear infinite;
+}
+
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Botão de tema */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg-input);
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  transition: all var(--transition);
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+  transform: rotate(20deg);
+}
+
+[data-theme="dark"] .icon-sun  { display: none; }
+[data-theme="dark"] .icon-moon { display: inline; }
+[data-theme="light"] .icon-sun  { display: inline; }
+[data-theme="light"] .icon-moon { display: none; }
+
+/* ── 4. HERO STRIP ───────────────────────────────────────────── */
+.hero-strip {
+  text-align: center;
+  padding: 4rem 2rem 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-label {
+  display: inline-block;
+  font-size: .75rem;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent-blue);
+  border: 1px solid rgba(79,110,247,.35);
+  border-radius: 100px;
+  padding: .25rem .85rem;
+  margin-bottom: 1.25rem;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -.03em;
+  margin-bottom: .75rem;
+}
+
+.hero-title span {
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  color: var(--text-secondary);
+  font-size: .95rem;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* ── 5. MAIN GRID ────────────────────────────────────────────── */
+.main-grid {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem 4rem;
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 1.75rem;
+  align-items: start;
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 900px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+    padding: 0 1.25rem 4rem;
+  }
+}
+
+/* ── 6. CARD BASE ────────────────────────────────────────────── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-card);
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.card-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  margin-bottom: 1.5rem;
+  padding-bottom: .75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── 7. FORMULÁRIO ───────────────────────────────────────────── */
+.form-card { /* herda .card */ }
+
+/* Fieldset groups */
+.field-group {
+  border: none;
+  margin-bottom: 1.5rem;
+}
+
+.group-legend {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-family: var(--font-display);
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--c, #4f6ef7);
+  box-shadow: 0 0 8px var(--c, #4f6ef7);
+}
+
+/* Row com 2 campos lado a lado */
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 500px) {
+  .field-row { grid-template-columns: 1fr; }
+}
+
+/* Campo individual */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  margin-bottom: .75rem;
+}
+
+.field label {
+  font-size: .8rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: .01em;
+}
+
+/* Wrapper com prefixo/sufixo */
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-prefix,
+.input-unit {
+  position: absolute;
+  font-size: .8rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  pointer-events: none;
+  transition: color var(--transition);
+}
+
+.input-prefix { left: .85rem; }
+.input-unit   { right: .85rem; }
+
+.input-wrap input {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: .95rem;
+  padding: .6rem .85rem;
+  outline: none;
+  transition: border-color var(--transition), background var(--transition), box-shadow var(--transition);
+  -moz-appearance: textfield; /* remove spinner no Firefox */
+}
+
+/* Remove spinner no Chrome/Safari */
+.input-wrap input::-webkit-outer-spin-button,
+.input-wrap input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+/* Espaçamento quando há prefixo ou sufixo */
+.input-prefix ~ input { padding-left: 2.4rem; }
+input:has(~ .input-unit) { padding-right: 2.4rem; }
+
+/* Combinação com JS (classe adicionada via JS para suporte cross-browser) */
+.has-prefix input { padding-left: 2.4rem; }
+.has-suffix input { padding-right: 2.4rem; }
+
+.input-wrap input:focus {
+  border-color: var(--border-focus);
+  background: var(--bg-input-focus);
+  box-shadow: 0 0 0 3px rgba(79,110,247,.12);
+}
+
+.input-wrap input:focus ~ .input-unit,
+.input-wrap:focus-within .input-prefix,
+.input-wrap:focus-within .input-unit {
+  color: var(--accent-blue);
+}
+
+/* Hint textinho abaixo do campo */
+.field-hint {
+  font-size: .75rem;
+  color: var(--text-muted);
+  margin-top: -.2rem;
+}
+
+/* ── 8. BOTÕES ───────────────────────────────────────────────── */
+.action-row {
+  display: flex;
+  gap: .75rem;
+  margin-top: 1.75rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .4rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-size: .9rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: .7rem 1.4rem;
+  transition: all var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ripple effect */
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,.08);
+  opacity: 0;
+  transition: opacity .15s;
+}
+.btn:active::after { opacity: 1; }
+
+/* Botão primário (Calcular) */
+.btn-primary {
+  background: var(--accent-blue);
+  color: #fff;
+  flex: 1;
+  box-shadow: var(--shadow-btn);
+}
+
+.btn-primary:hover {
+  background: #6b82f8;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(79,110,247,.45);
+}
+
+.btn-primary:active { transform: translateY(0); }
+
+/* Botão fantasma (Limpar) */
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.btn-ghost:hover {
+  border-color: var(--text-secondary);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+}
+
+/* Botão exportar PDF */
+.btn-export {
+  width: 100%;
+  margin-top: 1.25rem;
+  background: transparent;
+  border: 1px dashed var(--border);
+  color: var(--text-secondary);
+  font-size: .82rem;
+  padding: .6rem;
+  border-radius: var(--radius-sm);
+}
+
+.btn-export:hover {
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+  background: rgba(79,110,247,.06);
+}
+
+/* ── 9. MENSAGEM DE ERRO ──────────────────────────────────────── */
+.error-msg {
+  color: var(--error-color);
+  font-size: .8rem;
+  margin-top: .75rem;
+  min-height: 1.2em;
+  animation: fadeIn .2s ease;
+}
+
+/* ── 10. COLUNA DE RESULTADOS ─────────────────────────────────── */
+.results-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  position: sticky;
+  top: 80px;
+}
+
+@media (max-width: 900px) {
+  .results-column { position: static; }
+}
+
+/* ── 11. ESTADO VAZIO ─────────────────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: var(--text-muted);
+}
+
+.empty-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  opacity: .3;
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: .2; transform: scale(1); }
+  50%       { opacity: .4; transform: scale(1.08); }
+}
+
+/* ── 12. MÉTRICAS DE RESULTADO ────────────────────────────────── */
+.unit-badge {
+  display: inline-block;
+  font-size: .72rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: .2rem .7rem;
+  margin-bottom: 1.25rem;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .6rem;
+  margin-bottom: 1.25rem;
+}
+
+.metric {
+  background: var(--bg-card-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: .7rem .85rem;
+  transition: all var(--transition);
+}
+
+.metric:hover {
+  border-color: rgba(79,110,247,.3);
+}
+
+.metric-label {
+  display: block;
+  font-size: .72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: .15rem;
+}
+
+.metric-value {
+  display: block;
+  font-family: var(--font-display);
+  font-size: .95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.accent-total {
+  color: var(--accent-cyan) !important;
+}
+
+/* ── 13. PREÇO FINAL ──────────────────────────────────────────── */
+.final-price-box {
+  background: var(--final-bg);
+  border: 1px solid var(--final-border);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Brilho decorativo */
+.final-price-box::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -20%;
+  width: 60%;
+  height: 200%;
+  background: radial-gradient(ellipse, rgba(167,139,250,.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.final-price-label {
+  font-size: .72rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: .4rem;
+}
+
+.final-price-value {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: var(--final-value);
+  letter-spacing: -.02em;
+  animation: countUp .5s ease;
+}
+
+.final-price-sub {
+  font-size: .78rem;
+  color: var(--text-muted);
+  margin-top: .3rem;
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── 14. TOTAL DO LOTE ─────────────────────────────────────────── */
+.batch-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(52,211,153,.08);
+  border: 1px solid rgba(52,211,153,.25);
+  border-radius: var(--radius-sm);
+  padding: .7rem 1rem;
+  margin-top: .75rem;
+}
+
+.batch-label {
+  font-size: .8rem;
+  color: var(--accent-green);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.batch-value {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--accent-green);
+}
+
+/* ── 15. GRÁFICO ─────────────────────────────────────────────── */
+.chart-card { /* herda .card */ }
+
+.chart-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 340px;
+  margin: 0 auto;
+}
+
+/* ── 16. FOOTER ──────────────────────────────────────────────── */
+.site-footer {
+  text-align: center;
+  padding: 1.5rem 2rem;
+  color: var(--text-muted);
+  font-size: .78rem;
+  border-top: 1px solid var(--border);
+  position: relative;
+  z-index: 1;
+}
+
+/* ── 17. ANIMAÇÕES GLOBAIS ────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Entrada suave nos resultados */
+.result-content {
+  animation: slideUp .35s ease;
+}
+
+/* ── 18. GERENCIADOR DE PRESETS ──────────────────────────────── */
+
+.preset-section {
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: border-color var(--transition);
+}
+
+.preset-section:focus-within {
+  border-color: rgba(250,204,21,.3);
+}
+
+/* Cabeçalho da seção */
+.preset-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .75rem 1rem;
+  background: var(--bg-card-alt);
+  border-bottom: 1px solid var(--border);
+}
+
+.preset-title {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-family: var(--font-display);
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+/* Botão salvar preset */
+.btn-save-preset {
+  font-size: .78rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  padding: .3rem .85rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(250,204,21,.4);
+  background: rgba(250,204,21,.07);
+  color: #facc15;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.btn-save-preset:hover {
+  background: rgba(250,204,21,.15);
+  border-color: #facc15;
+  transform: translateY(-1px);
+}
+
+/* Lista de presets */
+.preset-list {
+  padding: .5rem;
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.preset-empty {
+  text-align: center;
+  font-size: .8rem;
+  color: var(--text-muted);
+  padding: .75rem;
+}
+
+/* Item individual de preset */
+.preset-item {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .5rem .75rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-input);
+  transition: all var(--transition);
+  animation: fadeIn .2s ease;
+}
+
+.preset-item:hover {
+  border-color: rgba(250,204,21,.35);
+  background: var(--bg-input-focus);
+}
+
+/* Dot indicador "mais recente" */
+.preset-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+  flex-shrink: 0;
+  transition: background var(--transition);
+}
+
+.preset-item.is-latest .preset-dot {
+  background: #facc15;
+  box-shadow: 0 0 6px #facc15;
+}
+
+/* Nome do preset */
+.preset-name {
+  flex: 1;
+  font-size: .85rem;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.preset-date {
+  font-size: .7rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* Botão carregar preset */
+.btn-preset-load {
+  font-size: .72rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  padding: .2rem .6rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+
+.btn-preset-load:hover {
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+}
+
+/* Botão excluir preset */
+.btn-preset-delete {
+  font-size: .75rem;
+  padding: .2rem .45rem;
+  border-radius: 4px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition);
+  line-height: 1;
+}
+
+.btn-preset-delete:hover {
+  color: var(--error-color);
+  background: rgba(248,113,113,.1);
+}
+
+/* Banner "último salvo" */
+.last-preset-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  padding: .6rem 1rem;
+  background: rgba(250,204,21,.06);
+  border-top: 1px solid rgba(250,204,21,.2);
+}
+
+.last-preset-info {
+  display: flex;
+  flex-direction: column;
+  gap: .1rem;
+}
+
+.last-preset-label {
+  font-size: .68rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.last-preset-name {
+  font-size: .85rem;
+  font-weight: 600;
+  color: #facc15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+
+/* Botão "usar este" */
+.btn-load-last {
+  font-size: .78rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  padding: .35rem .9rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(250,204,21,.5);
+  background: rgba(250,204,21,.1);
+  color: #facc15;
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+
+.btn-load-last:hover {
+  background: rgba(250,204,21,.2);
+  border-color: #facc15;
+}
+
+/* ── 18b. MODAL ──────────────────────────────────────────────── */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn .18s ease;
+}
+
+.modal-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  width: min(420px, 90vw);
+  box-shadow: 0 24px 60px rgba(0,0,0,.5);
+  animation: slideUp .22s ease;
+}
+
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: .35rem;
+}
+
+.modal-sub {
+  font-size: .85rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.1rem;
+}
+
+.modal-actions {
+  display: flex;
+  gap: .75rem;
+  margin-top: .85rem;
+}
+
+/* Toast de confirmação */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(12px);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: .55rem 1.25rem;
+  font-size: .82rem;
+  color: var(--text-primary);
+  box-shadow: 0 8px 32px rgba(0,0,0,.4);
+  z-index: 300;
+  opacity: 0;
+  transition: opacity .25s, transform .25s;
+  pointer-events: none;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ── 18c. E-COMMERCE BREAKDOWN ───────────────────────────────── */
+
+.ecommerce-breakdown {
+  margin-top: .9rem;
+  border: 1px solid rgba(244,114,182,.25);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  animation: slideUp .3s ease;
+}
+
+.ecommerce-title {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .55rem .9rem;
+  background: rgba(244,114,182,.07);
+  font-family: var(--font-display);
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #f472b6;
+  border-bottom: 1px solid rgba(244,114,182,.15);
+}
+
+.ecommerce-rows {
+  padding: .5rem .9rem;
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+}
+
+.ecommerce-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .35rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.ecommerce-row:last-child { border-bottom: none; }
+
+.ecommerce-row--total {
+  padding-top: .5rem;
+  margin-top: .15rem;
+  border-top: 1px dashed rgba(244,114,182,.3);
+  border-bottom: none;
+}
+
+.ecommerce-label {
+  font-size: .8rem;
+  color: var(--text-secondary);
+}
+
+.ecommerce-value {
+  font-family: var(--font-display);
+  font-size: .88rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.accent-pink { color: #f472b6 !important; }
+
+.ecommerce-price-box {
+  margin: .5rem .9rem .9rem;
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, rgba(244,114,182,.12) 0%, rgba(167,139,250,.1) 100%);
+  border: 1px solid rgba(244,114,182,.3);
+  text-align: center;
+}
+
+.ecommerce-price-label {
+  font-size: .7rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: .3rem;
+}
+
+.ecommerce-price-value {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #f472b6;
+  letter-spacing: -.02em;
+  animation: countUp .4s ease;
+}
+
+.ecommerce-price-sub {
+  font-size: .75rem;
+  color: var(--text-muted);
+  margin-top: .25rem;
+}
+
+/* ── 19. SCROLLBAR CUSTOM (dark mode) ────────────────────────── */
+[data-theme="dark"] ::-webkit-scrollbar { width: 6px; }
+[data-theme="dark"] ::-webkit-scrollbar-track { background: var(--bg-page); }
+[data-theme="dark"] ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* ── 19. UTILITÁRIOS ─────────────────────────────────────────── */
+[hidden] { display: none !important; }

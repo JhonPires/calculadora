@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Print3D Calc — Calculadora de Impressão 3D</title>
+
+  <!-- Google Fonts: Syne (display) + DM Sans (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <!-- Chart.js para o gráfico de composição -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <!-- jsPDF para exportar PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ─── HEADER ─────────────────────────────────────────────────── -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">◈</span>
+        <span class="logo-text">Print<em>3D</em> Calc</span>
+      </div>
+
+      <!-- Botão Dark/Light mode -->
+      <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema">
+        <span class="icon-sun">☀</span>
+        <span class="icon-moon">☽</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ─── HERO STRIP ──────────────────────────────────────────────── -->
+  <section class="hero-strip">
+    <p class="hero-label">Precifique com precisão</p>
+    <h1 class="hero-title">Calculadora de<br/><span>Peças Impressas em 3D</span></h1>
+    <p class="hero-sub">Insira os dados abaixo e obtenha o preço ideal para sua produção.</p>
+  </section>
+
+  <!-- ─── MAIN LAYOUT ─────────────────────────────────────────────── -->
+  <main class="main-grid">
+
+    <!-- ══ COLUNA ESQUERDA: FORMULÁRIO ══ -->
+    <section class="card form-card">
+      <h2 class="card-title">Parâmetros da Impressão</h2>
+
+      <!-- Bloco: Material -->
+      <fieldset class="field-group">
+        <legend class="group-legend">
+          <span class="legend-dot" style="--c:#f97316"></span>Material
+        </legend>
+
+        <div class="field-row">
+          <!-- Peso da peça -->
+          <div class="field">
+            <label for="weight">Peso da peça (g)</label>
+            <div class="input-wrap">
+              <input type="number" id="weight" min="0" step="0.1" placeholder="ex: 85" />
+              <span class="input-unit">g</span>
+            </div>
+          </div>
+          <!-- Custo do filamento -->
+          <div class="field">
+            <label for="filamentCost">Custo do filamento (R$/kg)</label>
+            <div class="input-wrap">
+              <span class="input-prefix">R$</span>
+              <input type="number" id="filamentCost" min="0" step="0.01" placeholder="ex: 120" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Taxa de falha -->
+        <div class="field">
+          <label for="failRate">Taxa de falha (%)</label>
+          <div class="input-wrap">
+            <input type="number" id="failRate" min="0" max="100" step="0.1" placeholder="ex: 5" />
+            <span class="input-unit">%</span>
+          </div>
+          <span class="field-hint">Percentual para cobrir erros de impressão</span>
+        </div>
+      </fieldset>
+
+      <!-- Bloco: Energia & Tempo -->
+      <fieldset class="field-group">
+        <legend class="group-legend">
+          <span class="legend-dot" style="--c:#06b6d4"></span>Energia &amp; Tempo
+        </legend>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="printTime">Tempo de impressão (h)</label>
+            <div class="input-wrap">
+              <input type="number" id="printTime" min="0" step="0.1" placeholder="ex: 4.5" />
+              <span class="input-unit">h</span>
+            </div>
+          </div>
+          <div class="field">
+            <label for="energyCost">Custo de energia (R$/h)</label>
+            <div class="input-wrap">
+              <span class="input-prefix">R$</span>
+              <input type="number" id="energyCost" min="0" step="0.01" placeholder="ex: 1.20" />
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- Bloco: Equipamento -->
+      <fieldset class="field-group">
+        <legend class="group-legend">
+          <span class="legend-dot" style="--c:#a78bfa"></span>Equipamento
+        </legend>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="printerCost">Valor da impressora (R$)</label>
+            <div class="input-wrap">
+              <span class="input-prefix">R$</span>
+              <input type="number" id="printerCost" min="0" step="1" placeholder="ex: 3000" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="printerLifespan">Vida útil estimada (h)</label>
+            <div class="input-wrap">
+              <input type="number" id="printerLifespan" min="1" step="1" placeholder="ex: 5000" />
+              <span class="input-unit">h</span>
+            </div>
+          </div>
+        </div>
+        <span class="field-hint">Depreciação do equipamento por hora de uso</span>
+      </fieldset>
+
+      <!-- Bloco: Custos Operacionais -->
+      <fieldset class="field-group">
+        <legend class="group-legend">
+          <span class="legend-dot" style="--c:#34d399"></span>Custos Operacionais
+        </legend>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="laborCost">Mão de obra (R$)</label>
+            <div class="input-wrap">
+              <span class="input-prefix">R$</span>
+              <input type="number" id="laborCost" min="0" step="0.01" placeholder="ex: 25" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="extraCost">Custos adicionais (R$)</label>
+            <div class="input-wrap">
+              <span class="input-prefix">R$</span>
+              <input type="number" id="extraCost" min="0" step="0.01" placeholder="ex: 5" />
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- Bloco: Negócio -->
+      <fieldset class="field-group">
+        <legend class="group-legend">
+          <span class="legend-dot" style="--c:#fb923c"></span>Negócio
+        </legend>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="profitMargin">Margem de lucro (%)</label>
+            <div class="input-wrap">
+              <input type="number" id="profitMargin" min="0" max="1000" step="0.1" placeholder="ex: 40" />
+              <span class="input-unit">%</span>
+            </div>
+          </div>
+          <div class="field">
+            <label for="quantity">Quantidade (lote)</label>
+            <div class="input-wrap">
+              <input type="number" id="quantity" min="1" step="1" value="1" placeholder="ex: 10" />
+              <span class="input-unit">un</span>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- Bloco: E-commerce -->
+      <fieldset class="field-group">
+        <legend class="group-legend">
+          <span class="legend-dot" style="--c:#f472b6"></span>E-commerce
+        </legend>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="ecommerceTax">Imposto / comissão (%)</label>
+            <div class="input-wrap">
+              <input type="number" id="ecommerceTax" min="0" max="100" step="0.1" placeholder="ex: 18" />
+              <span class="input-unit">%</span>
+            </div>
+            <span class="field-hint">Aplicado sobre o preço final com lucro</span>
+          </div>
+          <div class="field">
+            <label for="ecommerceFee">Taxa por item (R$)</label>
+            <div class="input-wrap">
+              <span class="input-prefix">R$</span>
+              <input type="number" id="ecommerceFee" min="0" step="0.01" placeholder="ex: 5" />
+            </div>
+            <span class="field-hint">Valor fixo cobrado por venda</span>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- ── GERENCIADOR DE PRESETS ─────────────────────────────── -->
+      <div class="preset-section">
+        <div class="preset-header">
+          <span class="preset-title">
+            <span class="legend-dot" style="--c:#facc15"></span>
+            Parâmetros salvos
+          </span>
+          <!-- Botão: salvar preset atual -->
+          <button class="btn btn-save-preset" id="savePresetBtn" title="Salvar parâmetros atuais">
+            ＋ Salvar atual
+          </button>
+        </div>
+
+        <!-- Lista de presets salvos (vazia até o usuário salvar) -->
+        <div class="preset-list" id="presetList">
+          <p class="preset-empty" id="presetEmpty">Nenhum parâmetro salvo ainda.</p>
+        </div>
+
+        <!-- Banner "último parâmetro salvo" (aparece quando há ao menos 1 preset) -->
+        <div class="last-preset-banner" id="lastPresetBanner" hidden>
+          <div class="last-preset-info">
+            <span class="last-preset-label">Último salvo:</span>
+            <span class="last-preset-name" id="lastPresetName">—</span>
+          </div>
+          <button class="btn btn-load-last" id="loadLastBtn">
+            ↩ Usar este
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal para nomear o preset -->
+      <div class="modal-overlay" id="presetModal" hidden>
+        <div class="modal-box">
+          <h3 class="modal-title">Salvar parâmetros</h3>
+          <p class="modal-sub">Dê um nome para identificar este conjunto de valores.</p>
+          <div class="input-wrap" style="margin-bottom:.5rem">
+            <input type="text" id="presetNameInput" maxlength="40"
+                   placeholder="ex: PLA Prusa — Peça Pequena" />
+          </div>
+          <div class="modal-actions">
+            <button class="btn btn-primary" id="confirmSaveBtn">Salvar</button>
+            <button class="btn btn-ghost" id="cancelSaveBtn">Cancelar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botões de ação -->
+      <div class="action-row">
+        <button class="btn btn-primary" id="calcBtn">
+          <span>◈ Calcular</span>
+        </button>
+        <button class="btn btn-ghost" id="clearBtn">
+          <span>↺ Limpar</span>
+        </button>
+      </div>
+
+      <!-- Mensagem de erro de validação -->
+      <div class="error-msg" id="errorMsg" aria-live="polite"></div>
+    </section>
+
+    <!-- ══ COLUNA DIREITA: RESULTADOS ══ -->
+    <aside class="results-column">
+
+      <!-- Card de resultados -->
+      <div class="card results-card" id="resultsCard">
+        <h2 class="card-title">Resultado</h2>
+
+        <!-- Estado vazio (antes de calcular) -->
+        <div class="empty-state" id="emptyState">
+          <div class="empty-icon">◈</div>
+          <p>Preencha os campos e clique em <strong>Calcular</strong> para ver o resultado.</p>
+        </div>
+
+        <!-- Resultados (escondido até calcular) -->
+        <div class="result-content" id="resultContent" hidden>
+
+          <!-- Linha de unidade -->
+          <div class="unit-badge" id="unitBadge">
+            Resultado por peça
+          </div>
+
+          <!-- Métricas detalhadas -->
+          <div class="metrics-grid">
+            <div class="metric">
+              <span class="metric-label">Material</span>
+              <span class="metric-value" id="resMaterial">R$ 0,00</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">Energia</span>
+              <span class="metric-value" id="resEnergy">R$ 0,00</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">Depreciação</span>
+              <span class="metric-value" id="resDepreciation">R$ 0,00</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">Mão de obra</span>
+              <span class="metric-value" id="resLabor">R$ 0,00</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">Adicionais</span>
+              <span class="metric-value" id="resExtra">R$ 0,00</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">Custo total</span>
+              <span class="metric-value accent-total" id="resTotal">R$ 0,00</span>
+            </div>
+          </div>
+
+          <!-- Preço final em destaque -->
+          <div class="final-price-box">
+            <div class="final-price-label">
+              <span id="finalPriceLabel">Preço final (por peça)</span>
+            </div>
+            <div class="final-price-value" id="resFinal">R$ 0,00</div>
+            <div class="final-price-sub" id="finalPriceSub"></div>
+          </div>
+
+          <!-- Custos de e-commerce (aparece quando preenchidos) -->
+          <div class="ecommerce-breakdown" id="ecommerceBreakdown" hidden>
+            <div class="ecommerce-title">
+              <span class="legend-dot" style="--c:#f472b6"></span>
+              Custos de e-commerce
+            </div>
+            <div class="ecommerce-rows">
+              <div class="ecommerce-row">
+                <span class="ecommerce-label">Taxa por item</span>
+                <span class="ecommerce-value" id="resEcommerceFee">R$ 0,00</span>
+              </div>
+              <div class="ecommerce-row">
+                <span class="ecommerce-label" id="resEcommerceTaxLabel">Imposto / comissão</span>
+                <span class="ecommerce-value" id="resEcommerceTax">R$ 0,00</span>
+              </div>
+              <div class="ecommerce-row ecommerce-row--total">
+                <span class="ecommerce-label">Total e-commerce</span>
+                <span class="ecommerce-value accent-pink" id="resEcommerceTotal">R$ 0,00</span>
+              </div>
+            </div>
+            <!-- Preço sugerido para venda online -->
+            <div class="ecommerce-price-box">
+              <div class="ecommerce-price-label">Preço para e-commerce</div>
+              <div class="ecommerce-price-value" id="resEcommercePrice">R$ 0,00</div>
+              <div class="ecommerce-price-sub" id="resEcommerceSub"></div>
+            </div>
+          </div>
+
+          <!-- Lote total (aparece quando qty > 1) -->
+          <div class="batch-total" id="batchTotal" hidden>
+            <span class="batch-label">Total do lote</span>
+            <span class="batch-value" id="resBatch">R$ 0,00</span>
+          </div>
+
+          <!-- Botão de exportar PDF -->
+          <button class="btn btn-export" id="exportBtn">
+            ↓ Exportar Orçamento PDF
+          </button>
+        </div>
+      </div>
+
+      <!-- Card do gráfico -->
+      <div class="card chart-card" id="chartCard" hidden>
+        <h2 class="card-title">Composição do Custo</h2>
+        <div class="chart-wrap">
+          <canvas id="costChart"></canvas>
+        </div>
+      </div>
+
+    </aside>
+  </main>
+
+  <!-- ─── FOOTER ──────────────────────────────────────────────────── -->
+  <footer class="site-footer">
+    <p>Print<em>3D</em> Calc — Valores armazenados localmente no navegador.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
