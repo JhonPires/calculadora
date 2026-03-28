@@ -17,67 +17,67 @@
 
 /* ── 1. REFERÊNCIAS AOS ELEMENTOS DO DOM ──────────────────────── */
 
-const html            = document.documentElement;
-const themeBtn        = document.getElementById('themeToggle');
-const calcBtn         = document.getElementById('calcBtn');
-const clearBtn        = document.getElementById('clearBtn');
-const exportBtn       = document.getElementById('exportBtn');
-const errorMsg        = document.getElementById('errorMsg');
+const html = document.documentElement;
+const themeBtn = document.getElementById('themeToggle');
+const calcBtn = document.getElementById('calcBtn');
+const clearBtn = document.getElementById('clearBtn');
+const exportBtn = document.getElementById('exportBtn');
+const errorMsg = document.getElementById('errorMsg');
 
 // Preset UI
-const savePresetBtn   = document.getElementById('savePresetBtn');
-const presetList      = document.getElementById('presetList');
-const presetEmpty     = document.getElementById('presetEmpty');
-const lastPresetBanner= document.getElementById('lastPresetBanner');
-const lastPresetName  = document.getElementById('lastPresetName');
-const loadLastBtn     = document.getElementById('loadLastBtn');
-const presetModal     = document.getElementById('presetModal');
+const savePresetBtn = document.getElementById('savePresetBtn');
+const presetList = document.getElementById('presetList');
+const presetEmpty = document.getElementById('presetEmpty');
+const lastPresetBanner = document.getElementById('lastPresetBanner');
+const lastPresetName = document.getElementById('lastPresetName');
+const loadLastBtn = document.getElementById('loadLastBtn');
+const presetModal = document.getElementById('presetModal');
 const presetNameInput = document.getElementById('presetNameInput');
-const confirmSaveBtn  = document.getElementById('confirmSaveBtn');
-const cancelSaveBtn   = document.getElementById('cancelSaveBtn');
+const confirmSaveBtn = document.getElementById('confirmSaveBtn');
+const cancelSaveBtn = document.getElementById('cancelSaveBtn');
 
 // Campos de entrada
 const fields = {
-  weight:          document.getElementById('weight'),
-  filamentCost:    document.getElementById('filamentCost'),
-  failRate:        document.getElementById('failRate'),
-  printTime:       document.getElementById('printTime'),
-  energyCost:      document.getElementById('energyCost'),
-  printerCost:     document.getElementById('printerCost'),
+  weight: document.getElementById('weight'),
+  filamentCost: document.getElementById('filamentCost'),
+  failRate: document.getElementById('failRate'),
+  printTime: document.getElementById('printTime'),
+  energyCost: document.getElementById('energyCost'),
+  printerCost: document.getElementById('printerCost'),
   printerLifespan: document.getElementById('printerLifespan'),
-  laborCost:       document.getElementById('laborCost'),
-  extraCost:       document.getElementById('extraCost'),
-  profitMargin:    document.getElementById('profitMargin'),
-  quantity:        document.getElementById('quantity'),
-  ecommerceTax:    document.getElementById('ecommerceTax'),
-  ecommerceFee:    document.getElementById('ecommerceFee'),
+  laborCost: document.getElementById('laborCost'),
+  extraCost: document.getElementById('extraCost'),
+  profitMargin: document.getElementById('profitMargin'),
+  quantity: document.getElementById('quantity'),
+  ecommerceTax: document.getElementById('ecommerceTax'),
+  ecommerceFee: document.getElementById('ecommerceFee'),
 };
 
 // Elementos de resultado
 const els = {
-  emptyState:     document.getElementById('emptyState'),
-  resultContent:  document.getElementById('resultContent'),
-  chartCard:      document.getElementById('chartCard'),
-  unitBadge:      document.getElementById('unitBadge'),
-  resMaterial:    document.getElementById('resMaterial'),
-  resEnergy:      document.getElementById('resEnergy'),
-  resDepreciation:document.getElementById('resDepreciation'),
-  resLabor:       document.getElementById('resLabor'),
-  resExtra:       document.getElementById('resExtra'),
-  resTotal:       document.getElementById('resTotal'),
-  finalPriceLabel:document.getElementById('finalPriceLabel'),
-  resFinal:       document.getElementById('resFinal'),
-  finalPriceSub:  document.getElementById('finalPriceSub'),
-  batchTotal:     document.getElementById('batchTotal'),
-  resBatch:       document.getElementById('resBatch'),
+  emptyState: document.getElementById('emptyState'),
+  resultContent: document.getElementById('resultContent'),
+  chartCard: document.getElementById('chartCard'),
+  unitBadge: document.getElementById('unitBadge'),
+  resMaterial: document.getElementById('resMaterial'),
+  resEnergy: document.getElementById('resEnergy'),
+  resDepreciation: document.getElementById('resDepreciation'),
+  resLabor: document.getElementById('resLabor'),
+  resExtra: document.getElementById('resExtra'),
+  resTotal: document.getElementById('resTotal'),
+  finalPriceLabel: document.getElementById('finalPriceLabel'),
+  resFinal: document.getElementById('resFinal'),
+  finalPriceSub: document.getElementById('finalPriceSub'),
+  batchTotal: document.getElementById('batchTotal'),
+  resBatch: document.getElementById('resBatch'),
   // E-commerce
-  ecommerceBreakdown:   document.getElementById('ecommerceBreakdown'),
-  resEcommerceFee:      document.getElementById('resEcommerceFee'),
+  ecommerceBreakdown: document.getElementById('ecommerceBreakdown'),
+  resEcommerceFee: document.getElementById('resEcommerceFee'),
   resEcommerceTaxLabel: document.getElementById('resEcommerceTaxLabel'),
-  resEcommerceTax:      document.getElementById('resEcommerceTax'),
-  resEcommerceTotal:    document.getElementById('resEcommerceTotal'),
-  resEcommercePrice:    document.getElementById('resEcommercePrice'),
-  resEcommerceSub:      document.getElementById('resEcommerceSub'),
+  resEcommerceTax: document.getElementById('resEcommerceTax'),
+  resEcommerceTotal: document.getElementById('resEcommerceTotal'),
+  resEcommercePrice: document.getElementById('resEcommercePrice'),
+  resEcommerceSub: document.getElementById('resEcommerceSub'),
 };
 
 /* ── 2. HELPERS ───────────────────────────────────────────────── */
@@ -172,10 +172,10 @@ loadFields();
  */
 function validate() {
   const required = [
-    { el: fields.weight,       label: 'Peso da peça' },
+    { el: fields.weight, label: 'Peso da peça' },
     { el: fields.filamentCost, label: 'Custo do filamento' },
-    { el: fields.printTime,    label: 'Tempo de impressão' },
-    { el: fields.energyCost,   label: 'Custo de energia' },
+    { el: fields.printTime, label: 'Tempo de impressão' },
+    { el: fields.energyCost, label: 'Custo de energia' },
   ];
 
   for (const { el, label } of required) {
@@ -186,11 +186,11 @@ function validate() {
 
   // Outros campos não podem ser negativos
   const nonNeg = [
-    { el: fields.failRate,        label: 'Taxa de falha' },
-    { el: fields.laborCost,       label: 'Mão de obra' },
-    { el: fields.extraCost,       label: 'Custos adicionais' },
-    { el: fields.profitMargin,    label: 'Margem de lucro' },
-    { el: fields.printerCost,     label: 'Valor da impressora' },
+    { el: fields.failRate, label: 'Taxa de falha' },
+    { el: fields.laborCost, label: 'Mão de obra' },
+    { el: fields.extraCost, label: 'Custos adicionais' },
+    { el: fields.profitMargin, label: 'Margem de lucro' },
+    { el: fields.printerCost, label: 'Valor da impressora' },
     { el: fields.printerLifespan, label: 'Vida útil da impressora' },
   ];
 
@@ -212,19 +212,19 @@ function validate() {
  */
 function calculate() {
   // Lê os valores dos campos
-  const weightG        = getVal(fields.weight);          // gramas
-  const filamentPerKg  = getVal(fields.filamentCost);    // R$/kg
-  const failRate       = getVal(fields.failRate) / 100;  // fração
-  const printTime      = getVal(fields.printTime);       // horas
-  const energyPerHour  = getVal(fields.energyCost);      // R$/h
-  const printerValue   = getVal(fields.printerCost);     // R$
-  const printerLife    = getVal(fields.printerLifespan); // horas
-  const laborCost      = getVal(fields.laborCost);       // R$
-  const extraCost      = getVal(fields.extraCost);       // R$
-  const profitMargin   = getVal(fields.profitMargin) / 100; // fração
-  const quantity       = Math.max(1, Math.round(getVal(fields.quantity)));
-  const ecommerceTax   = getVal(fields.ecommerceTax) / 100; // fração (% sobre preço final)
-  const ecommerceFee   = getVal(fields.ecommerceFee);       // R$ fixo por item
+  const weightG = getVal(fields.weight);          // gramas
+  const filamentPerKg = getVal(fields.filamentCost);    // R$/kg
+  const failRate = getVal(fields.failRate) / 100;  // fração
+  const printTime = getVal(fields.printTime);       // horas
+  const energyPerHour = getVal(fields.energyCost);      // R$/h
+  const printerValue = getVal(fields.printerCost);     // R$
+  const printerLife = getVal(fields.printerLifespan); // horas
+  const laborCost = getVal(fields.laborCost);       // R$
+  const extraCost = getVal(fields.extraCost);       // R$
+  const profitMargin = getVal(fields.profitMargin) / 100; // fração
+  const quantity = Math.max(1, Math.round(getVal(fields.quantity)));
+  const ecommerceTax = getVal(fields.ecommerceTax) / 100; // fração (% sobre preço final)
+  const ecommerceFee = getVal(fields.ecommerceFee);       // R$ fixo por item
 
   // ── Custo do material (por peça, sem considerar lote)
   // (peso em kg) × (custo por kg) × (1 + taxa de falha)
@@ -259,7 +259,7 @@ function calculate() {
   // ── Total para o lote (usando preço com e-commerce se houver, senão preço final)
   const hasEcommerce = ecommerceTax > 0 || ecommerceFee > 0;
   const pricePerUnit = hasEcommerce ? ecommercePrice : finalPrice;
-  const batchTotal   = pricePerUnit * quantity;
+  const batchTotal = pricePerUnit * quantity;
 
   return {
     materialCost,
@@ -287,7 +287,7 @@ function calculate() {
 /* ── 7. GRÁFICO (Chart.js) ────────────────────────────────────── */
 
 let chartInstance = null; // referência ao gráfico atual
-let lastResult    = null; // último resultado calculado (para redesenho no toggle de tema)
+let lastResult = null; // último resultado calculado (para redesenho no toggle de tema)
 
 /**
  * Cria ou atualiza o gráfico de rosca (doughnut)
@@ -301,17 +301,17 @@ function updateChart(result) {
   const textColor = isDark ? '#7b8098' : '#5a607a';
 
   // Dados para o gráfico (exclui itens zerados para não poluir)
-  const labels  = [];
-  const data    = [];
-  const colors  = [];
+  const labels = [];
+  const data = [];
+  const colors = [];
 
   const items = [
-    { label: 'Material',        value: result.materialCost,      color: '#f97316' },
-    { label: 'Energia',         value: result.energyCostTotal,   color: '#06b6d4' },
-    { label: 'Depreciação',     value: result.depreciationCost,  color: '#a78bfa' },
-    { label: 'Mão de obra',     value: result.laborCost,         color: '#34d399' },
-    { label: 'Adicionais',      value: result.extraCost,         color: '#fb923c' },
-    { label: 'E-commerce',      value: result.ecommerceTotalCost,color: '#f472b6' },
+    { label: 'Material', value: result.materialCost, color: '#f97316' },
+    { label: 'Energia', value: result.energyCostTotal, color: '#06b6d4' },
+    { label: 'Depreciação', value: result.depreciationCost, color: '#a78bfa' },
+    { label: 'Mão de obra', value: result.laborCost, color: '#34d399' },
+    { label: 'Adicionais', value: result.extraCost, color: '#fb923c' },
+    { label: 'E-commerce', value: result.ecommerceTotalCost, color: '#f472b6' },
   ];
 
   items.forEach(({ label, value, color }) => {
@@ -403,18 +403,18 @@ function displayResults(result) {
     : 'Resultado por peça';
 
   // Preenche métricas
-  els.resMaterial.textContent     = formatBRL(result.materialCost);
-  els.resEnergy.textContent       = formatBRL(result.energyCostTotal);
+  els.resMaterial.textContent = formatBRL(result.materialCost);
+  els.resEnergy.textContent = formatBRL(result.energyCostTotal);
   els.resDepreciation.textContent = formatBRL(result.depreciationCost);
-  els.resLabor.textContent        = formatBRL(result.laborCost);
-  els.resExtra.textContent        = formatBRL(result.extraCost);
-  els.resTotal.textContent        = formatBRL(result.totalCost);
+  els.resLabor.textContent = formatBRL(result.laborCost);
+  els.resExtra.textContent = formatBRL(result.extraCost);
+  els.resTotal.textContent = formatBRL(result.totalCost);
 
   // Preço final
   const marginPct = (result.profitMargin * 100).toFixed(0);
   els.finalPriceLabel.textContent = `Preço final (margem ${marginPct}%)`;
-  els.resFinal.textContent        = formatBRL(result.finalPrice);
-  els.finalPriceSub.textContent   = result.totalCost > 0
+  els.resFinal.textContent = formatBRL(result.finalPrice);
+  els.finalPriceSub.textContent = result.totalCost > 0
     ? `Lucro: ${formatBRL(result.finalPrice - result.totalCost)}`
     : '';
 
@@ -434,11 +434,11 @@ function displayResults(result) {
 
     const taxPct = (result.ecommerceTax * 100).toFixed(1);
     els.resEcommerceTaxLabel.textContent = `Imposto / comissão (${taxPct}%)`;
-    els.resEcommerceTax.textContent      = formatBRL(result.ecommerceTaxAmount);
-    els.resEcommerceTotal.textContent    = formatBRL(result.ecommerceTotalCost);
+    els.resEcommerceTax.textContent = formatBRL(result.ecommerceTaxAmount);
+    els.resEcommerceTotal.textContent = formatBRL(result.ecommerceTotalCost);
 
     els.resEcommercePrice.textContent = formatBRL(result.ecommercePrice);
-    els.resEcommerceSub.textContent   =
+    els.resEcommerceSub.textContent =
       `Lucro líquido após e-commerce: ${formatBRL(result.ecommercePrice - result.totalCost - result.ecommerceTotalCost)}`;
   } else {
     els.ecommerceBreakdown.hidden = true;
@@ -749,10 +749,10 @@ confirmSaveBtn.addEventListener('click', () => {
 // ─── Delegação de eventos na lista de presets ───────────────────
 
 presetList.addEventListener('click', (e) => {
-  const loadBtn   = e.target.closest('.btn-preset-load');
+  const loadBtn = e.target.closest('.btn-preset-load');
   const deleteBtn = e.target.closest('.btn-preset-delete');
 
-  if (loadBtn)   loadPreset(loadBtn.dataset.id);
+  if (loadBtn) loadPreset(loadBtn.dataset.id);
   if (deleteBtn) deletePreset(deleteBtn.dataset.id);
 });
 
@@ -776,21 +776,21 @@ function exportPDF() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
 
-  const margin  = 20;
-  const pageW   = 210;
+  const margin = 20;
+  const pageW = 210;
   const contentW = pageW - margin * 2;
   let y = margin;
 
   // ── Paleta de cores do PDF
   const C = {
-    primary:  [79, 110, 247],  // azul
-    dark:     [18, 22, 34],    // fundo escuro (títulos)
-    text:     [40, 45, 65],    // texto principal
-    muted:    [120, 130, 160], // texto secundário
-    accent:   [167, 139, 250], // roxo (preço final)
-    green:    [52, 211, 153],
-    white:    [255, 255, 255],
-    border:   [220, 225, 240],
+    primary: [79, 110, 247],  // azul
+    dark: [18, 22, 34],    // fundo escuro (títulos)
+    text: [40, 45, 65],    // texto principal
+    muted: [120, 130, 160], // texto secundário
+    accent: [167, 139, 250], // roxo (preço final)
+    green: [52, 211, 153],
+    white: [255, 255, 255],
+    border: [220, 225, 240],
   };
 
   // ─── Cabeçalho
@@ -800,7 +800,7 @@ function exportPDF() {
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(20);
   doc.setTextColor(...C.white);
-  doc.text('Print3D Calc', margin, 18);
+  doc.text('i3DLab', margin, 18);
 
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
@@ -856,27 +856,27 @@ function exportPDF() {
 
   const f = fields; // atalho
 
-  dataRow('Peso da peça',          `${getVal(f.weight)} g`);
-  dataRow('Custo do filamento',    `${formatBRL(getVal(f.filamentCost))} / kg`);
-  dataRow('Taxa de falha',         `${getVal(f.failRate)} %`);
-  dataRow('Tempo de impressão',    `${getVal(f.printTime)} h`);
-  dataRow('Custo de energia',      `${formatBRL(getVal(f.energyCost))} / h`);
-  dataRow('Valor da impressora',   formatBRL(getVal(f.printerCost)));
-  dataRow('Vida útil estimada',    `${getVal(f.printerLifespan)} h`);
-  dataRow('Mão de obra',           formatBRL(getVal(f.laborCost)));
-  dataRow('Custos adicionais',     formatBRL(getVal(f.extraCost)));
-  dataRow('Margem de lucro',       `${getVal(f.profitMargin)} %`);
-  dataRow('Quantidade (lote)',     `${quantity} un`);
+  dataRow('Peso da peça', `${getVal(f.weight)} g`);
+  dataRow('Custo do filamento', `${formatBRL(getVal(f.filamentCost))} / kg`);
+  dataRow('Taxa de falha', `${getVal(f.failRate)} %`);
+  dataRow('Tempo de impressão', `${getVal(f.printTime)} h`);
+  dataRow('Custo de energia', `${formatBRL(getVal(f.energyCost))} / h`);
+  dataRow('Valor da impressora', formatBRL(getVal(f.printerCost)));
+  dataRow('Vida útil estimada', `${getVal(f.printerLifespan)} h`);
+  dataRow('Mão de obra', formatBRL(getVal(f.laborCost)));
+  dataRow('Custos adicionais', formatBRL(getVal(f.extraCost)));
+  dataRow('Margem de lucro', `${getVal(f.profitMargin)} %`);
+  dataRow('Quantidade (lote)', `${quantity} un`);
 
   y += 4;
 
   // ─── Composição de custos
   sectionTitle('Composição dos Custos (por peça)');
-  dataRow('Custo do material',     formatBRL(materialCost));
-  dataRow('Custo de energia',      formatBRL(energyCostTotal));
+  dataRow('Custo do material', formatBRL(materialCost));
+  dataRow('Custo de energia', formatBRL(energyCostTotal));
   dataRow('Depreciação do equip.', formatBRL(depreciationCost));
-  dataRow('Mão de obra',           formatBRL(laborCost));
-  dataRow('Custos adicionais',     formatBRL(extraCost));
+  dataRow('Mão de obra', formatBRL(laborCost));
+  dataRow('Custos adicionais', formatBRL(extraCost));
 
   y += 2;
 
@@ -902,7 +902,7 @@ function exportPDF() {
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(9);
   doc.setTextColor(...C.muted);
-  doc.text(`PREÇO FINAL (margem ${(profitMargin*100).toFixed(0)}%)`, margin + 4, y + 0.5);
+  doc.text(`PREÇO FINAL (margem ${(profitMargin * 100).toFixed(0)}%)`, margin + 4, y + 0.5);
 
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(16);
@@ -916,7 +916,7 @@ function exportPDF() {
     sectionTitle('Custos de E-commerce');
 
     dataRow(`Taxa por item`, formatBRL(ecommerceFee));
-    dataRow(`Imposto / comissão (${(ecommerceTax*100).toFixed(1)}%)`, formatBRL(ecommerceTaxAmount));
+    dataRow(`Imposto / comissão (${(ecommerceTax * 100).toFixed(1)}%)`, formatBRL(ecommerceTaxAmount));
     dataRow('Total e-commerce', formatBRL(ecommerceTotalCost));
 
     y += 2;
@@ -955,14 +955,14 @@ function exportPDF() {
     y += 16;
   }
 
-  // ─── Rodapé
-  y = 287;
-  doc.setFillColor(...C.border);
-  doc.rect(0, y - 3, pageW, 10, 'F');
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(7);
-  doc.setTextColor(...C.muted);
-  doc.text('Gerado por Print3D Calc  •  Os valores são estimativas baseadas nos dados inseridos.', pageW / 2, y + 3, { align: 'center' });
+  // // ─── Rodapé
+  // y = 287;
+  // doc.setFillColor(...C.border);
+  // doc.rect(0, y - 3, pageW, 10, 'F');
+  // doc.setFont('helvetica', 'normal');
+  // doc.setFontSize(7);
+  // doc.setTextColor(...C.muted);
+  // doc.text('Gerado por Print3D Calc  •  Os valores são estimativas baseadas nos dados inseridos.', pageW / 2, y + 3, { align: 'center' });
 
   // ─── Salva o arquivo
   doc.save(`orcamento_3d_${Date.now()}.pdf`);
