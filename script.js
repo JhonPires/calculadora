@@ -777,88 +777,87 @@ function exportPDF() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
 
-  const margin   = 20;
-  const pageW    = 210;
-  const contentW = pageW - margin * 2;
+  const margin    = 20;
+  const pageW     = 210;
+  const pageH     = 297;
+  const contentW  = pageW - margin * 2;
+  const footerH   = 14;          // altura reservada para o rodapé
+  const safeBottom = pageH - footerH - 6; // limite seguro antes do rodapé
   let y = margin;
 
-  // Paleta de cores do PDF
+  // Paleta de cores
   const C = {
     primary: [79, 110, 247],
     dark:    [18, 22, 34],
     text:    [40, 45, 65],
     muted:   [120, 130, 160],
-    accent:  [167, 139, 250],  // roxo — preco sem e-commerce
-    pink:    [244, 114, 182],  // rosa  — e-commerce
+    accent:  [167, 139, 250],
+    pink:    [244, 114, 182],
     green:   [52, 211, 153],
     white:   [255, 255, 255],
     border:  [220, 225, 240],
   };
 
-  // Desestrutura TODOS os valores do ultimo resultado calculado
+  // Desestrutura o resultado calculado
   const {
     materialCost,
     energyCostTotal,
     depreciationCost,
     laborCost,
     extraCost,
-    totalCost,          // soma dos custos de producao (sem lucro)
-    finalPrice,         // preco apos margem de lucro (SEM e-commerce)
+    totalCost,
+    finalPrice,
     hasEcommerce,
-    ecommerceFee,       // taxa fixa por item (R$)
-    ecommerceTax,       // imposto como fracao (ex: 0.18)
-    ecommerceTaxAmount, // imposto em R$ = finalPrice x ecommerceTax
-    ecommerceTotalCost, // ecommerceTaxAmount + ecommerceFee
-    ecommercePrice,     // preco final COM e-commerce = finalPrice + ecommerceTotalCost
-    batchTotal,         // total do lote (usa ecommercePrice se aplicavel)
-    profitMargin,       // margem como fracao (ex: 0.40)
+    ecommerceFee,
+    ecommerceTax,
+    ecommerceTaxAmount,
+    ecommerceTotalCost,
+    ecommercePrice,
+    batchTotal,
+    profitMargin,
     quantity,
   } = lastResult;
 
-  // Preco final a ser destacado no PDF:
-  //   Com e-commerce -> ecommercePrice (= finalPrice + taxas)
-  //   Sem e-commerce -> finalPrice
-  const priceFinal = hasEcommerce ? ecommercePrice : finalPrice;
-
-  // Lucro bruto (antes das taxas de plataforma)
-  const lucroBruto = finalPrice - totalCost;
-
-  // Lucro liquido = o que sobra depois de pagar producao E a plataforma
-  // As taxas de e-commerce sao custo do vendedor, nao do comprador
+  // Preco final = com e-commerce se houver, senao so lucro
+  const priceFinal  = hasEcommerce ? ecommercePrice : finalPrice;
+  const lucroBruto  = finalPrice - totalCost;
   const lucroLiquido = hasEcommerce
     ? finalPrice - totalCost - ecommerceTotalCost
     : lucroBruto;
 
-  const f = fields; // atalho para os campos do formulario
+  const f = fields;
 
   // ================================================================
-  // CABECALHO
-  // ================================================================
-  doc.setFillColor(...C.dark);
-  doc.rect(0, 0, pageW, 38, 'F');
-
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(20);
-  doc.setTextColor(...C.white);
-  doc.text('i3DLab', margin, 18);
-
-  doc.setFontSize(9);
-  doc.setFont('helvetica', 'normal');
-  doc.setTextColor(...C.muted);
-  doc.text('Orcamento de Peca Impressa em 3D', margin, 26);
-
-  const now = new Date().toLocaleString('pt-BR');
-  doc.text('Emitido em: ' + now, pageW - margin, 26, { align: 'right' });
-
-  y = 50;
-
-  // ================================================================
-  // HELPERS LOCAIS
+  // HELPERS
   // ================================================================
 
-  // Titulo de secao com linha separadora colorida
+  // Desenha o rodapé na página atual
+  function drawFooter() {
+    var fy = pageH - footerH + 2;
+    doc.setFillColor(C.border[0], C.border[1], C.border[2]);
+    doc.rect(0, fy - 2, pageW, footerH, 'F');
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7);
+    doc.setTextColor(C.muted[0], C.muted[1], C.muted[2]);
+    doc.text(
+      'Gerado por i3D Lab -  Os valores sao estimativas baseadas nos dados inseridos.',
+      pageW / 2, fy + 5, { align: 'center' }
+    );
+  }
+
+  // Verifica se o proximo bloco cabe na pagina; se nao, adiciona nova pagina
+  function checkPage(neededHeight) {
+    if (y + neededHeight > safeBottom) {
+      drawFooter();
+      doc.addPage();
+      y = margin;
+    }
+  }
+
+  // Titulo de secao com linha colorida
   function sectionTitle(text, color) {
     var col = color || C.primary;
+    checkPage(14);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(9);
     doc.setTextColor(col[0], col[1], col[2]);
@@ -869,61 +868,80 @@ function exportPDF() {
     y += 8;
   }
 
-  // Linha de dado com fundo zebrado e cores configuráveis
+  // Linha de dado (altura fixa = 10mm)
   function dataRow(label, value, opts) {
-    var o = opts || {};
+    var o          = opts || {};
     var fill       = o.fill       || C.border;
     var labelColor = o.labelColor || C.text;
     var valueColor = o.valueColor || C.text;
 
+    checkPage(10);
     doc.setFillColor(fill[0], fill[1], fill[2]);
     doc.roundedRect(margin, y - 4.5, contentW, 8, 1, 1, 'F');
-
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(9);
     doc.setTextColor(labelColor[0], labelColor[1], labelColor[2]);
     doc.text(label, margin + 3, y);
-
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(valueColor[0], valueColor[1], valueColor[2]);
     doc.text(value, pageW - margin - 3, y, { align: 'right' });
-
     y += 10;
   }
 
-  // Caixa de destaque grande para totais
+  // Caixa destacada para precos finais
   function highlightBox(label, sublabel, value, opts) {
-    var o          = opts || {};
-    var fillColor  = o.fillColor   || [235, 230, 254];
-    var borderColor= o.borderColor || C.accent;
-    var textColor  = o.textColor   || C.accent;
-    var height     = o.height      || 24;
+    var o           = opts || {};
+    var fillColor   = o.fillColor   || [235, 230, 254];
+    var borderColor = o.borderColor || C.accent;
+    var textColor   = o.textColor   || C.accent;
+    var height      = o.height      || 28;
 
+    checkPage(height + 10);
     doc.setFillColor(fillColor[0], fillColor[1], fillColor[2]);
     doc.roundedRect(margin, y - 6, contentW, height, 3, 3, 'F');
     doc.setDrawColor(borderColor[0], borderColor[1], borderColor[2]);
     doc.setLineWidth(0.5);
     doc.roundedRect(margin, y - 6, contentW, height, 3, 3, 'S');
 
+    // Label pequeno superior esquerdo
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(8);
     doc.setTextColor(C.muted[0], C.muted[1], C.muted[2]);
     doc.text(label, margin + 4, y + 0.5);
 
+    // Valor grande a direita
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(18);
     doc.setTextColor(textColor[0], textColor[1], textColor[2]);
-    doc.text(value, pageW - margin - 4, y + 10, { align: 'right' });
+    doc.text(value, pageW - margin - 4, y + 11, { align: 'right' });
 
+    // Sublabel inferior esquerdo
     if (sublabel) {
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(7.5);
       doc.setTextColor(C.muted[0], C.muted[1], C.muted[2]);
-      doc.text(sublabel, margin + 4, y + 14);
+      doc.text(sublabel, margin + 4, y + 17);
     }
 
     y += height + 8;
   }
+
+  // ================================================================
+  // CABECALHO (primeira pagina)
+  // ================================================================
+  doc.setFillColor(C.dark[0], C.dark[1], C.dark[2]);
+  doc.rect(0, 0, pageW, 38, 'F');
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(20);
+  doc.setTextColor(C.white[0], C.white[1], C.white[2]);
+  doc.text('i3D Lab', margin, 18);
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(C.muted[0], C.muted[1], C.muted[2]);
+  doc.text('Orcamento de Peca Impressa em 3D', margin, 26);
+  var now = new Date().toLocaleString('pt-BR');
+  doc.text('Emitido em: ' + now, pageW - margin, 26, { align: 'right' });
+  y = 50;
 
   // ================================================================
   // SECAO 1 — PARAMETROS
@@ -948,7 +966,7 @@ function exportPDF() {
   y += 4;
 
   // ================================================================
-  // SECAO 2 — COMPOSICAO DE CUSTOS DE PRODUCAO
+  // SECAO 2 — COMPOSICAO DOS CUSTOS
   // ================================================================
   sectionTitle('Composicao dos Custos de Producao (por peca)');
   dataRow('Material',              formatBRL(materialCost));
@@ -958,8 +976,8 @@ function exportPDF() {
   dataRow('Adicionais',            formatBRL(extraCost));
 
   y += 2;
-
-  // Custo total de producao (verde)
+  // Custo total (verde)
+  checkPage(12);
   doc.setFillColor(220, 252, 231);
   doc.roundedRect(margin, y - 4.5, contentW, 8, 1, 1, 'F');
   doc.setFont('helvetica', 'bold');
@@ -971,23 +989,19 @@ function exportPDF() {
   y += 14;
 
   // ================================================================
-  // SECAO 3 — FORMACAO DO PRECO DE VENDA
-  // Mostra a "escada": Custo -> +Lucro -> +E-commerce -> Preco final
+  // SECAO 3 — FORMACAO DO PRECO: escada Custo → Lucro → E-commerce
   // ================================================================
   sectionTitle('Formacao do Preco de Venda (por peca)');
 
-  // Custo de producao (referencia, em cinza)
   dataRow('Custo de producao', formatBRL(totalCost),
     { labelColor: C.muted, valueColor: C.muted });
 
-  // (+) Margem de lucro
   dataRow(
     '(+) Margem de lucro — ' + (profitMargin * 100).toFixed(0) + '% sobre custo',
     '+ ' + formatBRL(finalPrice - totalCost),
     { valueColor: C.green }
   );
 
-  // Subtotal com lucro (antes do e-commerce)
   dataRow(
     'Subtotal com lucro (sem taxas de plataforma)',
     formatBRL(finalPrice),
@@ -995,7 +1009,7 @@ function exportPDF() {
   );
 
   // ================================================================
-  // TAXAS DE E-COMMERCE (so aparece se preenchido)
+  // TAXAS DE E-COMMERCE
   // ================================================================
   if (hasEcommerce) {
     y += 4;
@@ -1018,6 +1032,7 @@ function exportPDF() {
     }
 
     // Total das taxas e-commerce
+    checkPage(12);
     doc.setFillColor(254, 226, 239);
     doc.roundedRect(margin, y - 4.5, contentW, 8, 1, 1, 'F');
     doc.setFont('helvetica', 'bold');
@@ -1029,72 +1044,70 @@ function exportPDF() {
     y += 14;
   }
 
-  // ================================================================
-  // CAIXA DE DESTAQUE — PRECO FINAL
-  //
-  // SEM e-commerce: exibe finalPrice (custo + lucro)
-  // COM e-commerce: exibe ecommercePrice = finalPrice + ecommerceTaxAmount + ecommerceFee
-  //
-  // O lucro liquido indica o que sobra apos pagar producao e plataforma.
-  // ================================================================
-  var finalLabel = hasEcommerce
-    ? 'PRECO FINAL (lucro + taxas e-commerce incluidas)'
-    : 'PRECO FINAL (margem ' + (profitMargin * 100).toFixed(0) + '%)';
+  y += 2;
 
-  var finalSublabel = hasEcommerce
-    ? 'Lucro liquido apos e-commerce: ' + formatBRL(lucroLiquido)
-    : 'Lucro: ' + formatBRL(lucroBruto);
-
+  // ================================================================
+  // CAIXA 1 — PRECO COM LUCRO (sempre visivel)
+  // Preco que o vendedor precisa receber para cobrir custos + lucro,
+  // antes de considerar as taxas da plataforma.
+  // ================================================================
   highlightBox(
-    finalLabel,
-    finalSublabel,
-    formatBRL(priceFinal),
+    'PRECO DE VENDA (custo + lucro)',
+    'Lucro bruto: ' + formatBRL(lucroBruto),
+    formatBRL(finalPrice),
     {
-      fillColor:   hasEcommerce ? [254, 226, 239] : [235, 230, 254],
-      borderColor: hasEcommerce ? C.pink          : C.accent,
-      textColor:   hasEcommerce ? C.pink          : C.accent,
-      height: 26,
+      fillColor:   [235, 230, 254],
+      borderColor: C.accent,
+      textColor:   C.accent,
+      height: 28,
     }
   );
 
   // ================================================================
-  // TOTAL DO LOTE (so aparece quando qty > 1)
-  // batchTotal ja usa ecommercePrice se aplicavel
+  // CAIXA 2 — PRECO PARA E-COMMERCE (so aparece se hasEcommerce)
+  // Preco anunciado na plataforma = preco de venda + taxas.
+  // E o valor que o comprador paga; o vendedor recebe finalPrice.
+  // ================================================================
+  if (hasEcommerce) {
+    highlightBox(
+      'PRECO PARA E-COMMERCE (valor anunciado na plataforma)',
+      'Lucro liquido apos taxas: ' + formatBRL(lucroLiquido),
+      formatBRL(ecommercePrice),
+      {
+        fillColor:   [254, 226, 239],
+        borderColor: C.pink,
+        textColor:   C.pink,
+        height: 28,
+      }
+    );
+  }
+
+  // ================================================================
+  // TOTAL DO LOTE (qty > 1)
   // ================================================================
   if (quantity > 1) {
+    checkPage(20);
     doc.setFillColor(C.dark[0], C.dark[1], C.dark[2]);
-    doc.roundedRect(margin, y - 5, contentW, 14, 2, 2, 'F');
-
+    doc.roundedRect(margin, y - 5, contentW, 16, 2, 2, 'F');
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(8);
     doc.setTextColor(C.muted[0], C.muted[1], C.muted[2]);
     doc.text(
       'TOTAL DO LOTE — ' + quantity + ' pecas x ' + formatBRL(priceFinal),
-      margin + 4, y + 1.5
+      margin + 4, y + 2
     );
-
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(13);
+    doc.setFontSize(14);
     doc.setTextColor(C.white[0], C.white[1], C.white[2]);
-    doc.text(formatBRL(batchTotal), pageW - margin - 4, y + 6, { align: 'right' });
-    y += 20;
+    doc.text(formatBRL(batchTotal), pageW - margin - 4, y + 8, { align: 'right' });
+    y += 22;
   }
 
   // ================================================================
-  // RODAPE
+  // RODAPE (ultima pagina)
   // ================================================================
-  y = 287;
-  doc.setFillColor(C.border[0], C.border[1], C.border[2]);
-  doc.rect(0, y - 3, pageW, 10, 'F');
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(7);
-  doc.setTextColor(C.muted[0], C.muted[1], C.muted[2]);
-  doc.text(
-    'Gerado por i3DLab  -  Os valores sao estimativas baseadas nos dados inseridos.',
-    pageW / 2, y + 3, { align: 'center' }
-  );
+  drawFooter();
 
-  // Salva o arquivo
   doc.save('orcamento_3d_' + Date.now() + '.pdf');
 }
 /* ── 14. INICIALIZAÇÃO ────────────────────────────────────────── */
