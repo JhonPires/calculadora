@@ -17,67 +17,67 @@
 
 /* ── 1. REFERÊNCIAS AOS ELEMENTOS DO DOM ──────────────────────── */
 
-const html = document.documentElement;
-const themeBtn = document.getElementById('themeToggle');
-const calcBtn = document.getElementById('calcBtn');
-const clearBtn = document.getElementById('clearBtn');
-const exportBtn = document.getElementById('exportBtn');
-const errorMsg = document.getElementById('errorMsg');
+const html            = document.documentElement;
+const themeBtn        = document.getElementById('themeToggle');
+const calcBtn         = document.getElementById('calcBtn');
+const clearBtn        = document.getElementById('clearBtn');
+const exportBtn       = document.getElementById('exportBtn');
+const errorMsg        = document.getElementById('errorMsg');
 
 // Preset UI
-const savePresetBtn = document.getElementById('savePresetBtn');
-const presetList = document.getElementById('presetList');
-const presetEmpty = document.getElementById('presetEmpty');
-const lastPresetBanner = document.getElementById('lastPresetBanner');
-const lastPresetName = document.getElementById('lastPresetName');
-const loadLastBtn = document.getElementById('loadLastBtn');
-const presetModal = document.getElementById('presetModal');
+const savePresetBtn   = document.getElementById('savePresetBtn');
+const presetList      = document.getElementById('presetList');
+const presetEmpty     = document.getElementById('presetEmpty');
+const lastPresetBanner= document.getElementById('lastPresetBanner');
+const lastPresetName  = document.getElementById('lastPresetName');
+const loadLastBtn     = document.getElementById('loadLastBtn');
+const presetModal     = document.getElementById('presetModal');
 const presetNameInput = document.getElementById('presetNameInput');
-const confirmSaveBtn = document.getElementById('confirmSaveBtn');
-const cancelSaveBtn = document.getElementById('cancelSaveBtn');
+const confirmSaveBtn  = document.getElementById('confirmSaveBtn');
+const cancelSaveBtn   = document.getElementById('cancelSaveBtn');
 
 // Campos de entrada
 const fields = {
-  weight: document.getElementById('weight'),
-  filamentCost: document.getElementById('filamentCost'),
-  failRate: document.getElementById('failRate'),
-  printTime: document.getElementById('printTime'),
-  energyCost: document.getElementById('energyCost'),
-  printerCost: document.getElementById('printerCost'),
+  weight:          document.getElementById('weight'),
+  filamentCost:    document.getElementById('filamentCost'),
+  failRate:        document.getElementById('failRate'),
+  printTime:       document.getElementById('printTime'),
+  energyCost:      document.getElementById('energyCost'),
+  printerCost:     document.getElementById('printerCost'),
   printerLifespan: document.getElementById('printerLifespan'),
-  laborCost: document.getElementById('laborCost'),
-  extraCost: document.getElementById('extraCost'),
-  profitMargin: document.getElementById('profitMargin'),
-  quantity: document.getElementById('quantity'),
-  ecommerceTax: document.getElementById('ecommerceTax'),
-  ecommerceFee: document.getElementById('ecommerceFee'),
+  laborCost:       document.getElementById('laborCost'),
+  extraCost:       document.getElementById('extraCost'),
+  profitMargin:    document.getElementById('profitMargin'),
+  quantity:        document.getElementById('quantity'),
+  ecommerceTax:    document.getElementById('ecommerceTax'),
+  ecommerceFee:    document.getElementById('ecommerceFee'),
 };
 
 // Elementos de resultado
 const els = {
-  emptyState: document.getElementById('emptyState'),
-  resultContent: document.getElementById('resultContent'),
-  chartCard: document.getElementById('chartCard'),
-  unitBadge: document.getElementById('unitBadge'),
-  resMaterial: document.getElementById('resMaterial'),
-  resEnergy: document.getElementById('resEnergy'),
-  resDepreciation: document.getElementById('resDepreciation'),
-  resLabor: document.getElementById('resLabor'),
-  resExtra: document.getElementById('resExtra'),
-  resTotal: document.getElementById('resTotal'),
-  finalPriceLabel: document.getElementById('finalPriceLabel'),
-  resFinal: document.getElementById('resFinal'),
-  finalPriceSub: document.getElementById('finalPriceSub'),
-  batchTotal: document.getElementById('batchTotal'),
-  resBatch: document.getElementById('resBatch'),
+  emptyState:     document.getElementById('emptyState'),
+  resultContent:  document.getElementById('resultContent'),
+  chartCard:      document.getElementById('chartCard'),
+  unitBadge:      document.getElementById('unitBadge'),
+  resMaterial:    document.getElementById('resMaterial'),
+  resEnergy:      document.getElementById('resEnergy'),
+  resDepreciation:document.getElementById('resDepreciation'),
+  resLabor:       document.getElementById('resLabor'),
+  resExtra:       document.getElementById('resExtra'),
+  resTotal:       document.getElementById('resTotal'),
+  finalPriceLabel:document.getElementById('finalPriceLabel'),
+  resFinal:       document.getElementById('resFinal'),
+  finalPriceSub:  document.getElementById('finalPriceSub'),
+  batchTotal:     document.getElementById('batchTotal'),
+  resBatch:       document.getElementById('resBatch'),
   // E-commerce
-  ecommerceBreakdown: document.getElementById('ecommerceBreakdown'),
-  resEcommerceFee: document.getElementById('resEcommerceFee'),
+  ecommerceBreakdown:   document.getElementById('ecommerceBreakdown'),
+  resEcommerceFee:      document.getElementById('resEcommerceFee'),
   resEcommerceTaxLabel: document.getElementById('resEcommerceTaxLabel'),
-  resEcommerceTax: document.getElementById('resEcommerceTax'),
-  resEcommerceTotal: document.getElementById('resEcommerceTotal'),
-  resEcommercePrice: document.getElementById('resEcommercePrice'),
-  resEcommerceSub: document.getElementById('resEcommerceSub'),
+  resEcommerceTax:      document.getElementById('resEcommerceTax'),
+  resEcommerceTotal:    document.getElementById('resEcommerceTotal'),
+  resEcommercePrice:    document.getElementById('resEcommercePrice'),
+  resEcommerceSub:      document.getElementById('resEcommerceSub'),
 };
 
 /* ── 2. HELPERS ───────────────────────────────────────────────── */
@@ -172,10 +172,10 @@ loadFields();
  */
 function validate() {
   const required = [
-    { el: fields.weight, label: 'Peso da peça' },
+    { el: fields.weight,       label: 'Peso da peça' },
     { el: fields.filamentCost, label: 'Custo do filamento' },
-    { el: fields.printTime, label: 'Tempo de impressão' },
-    { el: fields.energyCost, label: 'Custo de energia' },
+    { el: fields.printTime,    label: 'Tempo de impressão' },
+    { el: fields.energyCost,   label: 'Custo de energia' },
   ];
 
   for (const { el, label } of required) {
@@ -186,11 +186,11 @@ function validate() {
 
   // Outros campos não podem ser negativos
   const nonNeg = [
-    { el: fields.failRate, label: 'Taxa de falha' },
-    { el: fields.laborCost, label: 'Mão de obra' },
-    { el: fields.extraCost, label: 'Custos adicionais' },
-    { el: fields.profitMargin, label: 'Margem de lucro' },
-    { el: fields.printerCost, label: 'Valor da impressora' },
+    { el: fields.failRate,        label: 'Taxa de falha' },
+    { el: fields.laborCost,       label: 'Mão de obra' },
+    { el: fields.extraCost,       label: 'Custos adicionais' },
+    { el: fields.profitMargin,    label: 'Margem de lucro' },
+    { el: fields.printerCost,     label: 'Valor da impressora' },
     { el: fields.printerLifespan, label: 'Vida útil da impressora' },
   ];
 
@@ -212,19 +212,19 @@ function validate() {
  */
 function calculate() {
   // Lê os valores dos campos
-  const weightG = getVal(fields.weight);          // gramas
-  const filamentPerKg = getVal(fields.filamentCost);    // R$/kg
-  const failRate = getVal(fields.failRate) / 100;  // fração
-  const printTime = getVal(fields.printTime);       // horas
-  const energyPerHour = getVal(fields.energyCost);      // R$/h
-  const printerValue = getVal(fields.printerCost);     // R$
-  const printerLife = getVal(fields.printerLifespan); // horas
-  const laborCost = getVal(fields.laborCost);       // R$
-  const extraCost = getVal(fields.extraCost);       // R$
-  const profitMargin = getVal(fields.profitMargin) / 100; // fração
-  const quantity = Math.max(1, Math.round(getVal(fields.quantity)));
-  const ecommerceTax = getVal(fields.ecommerceTax) / 100; // fração (% sobre preço final)
-  const ecommerceFee = getVal(fields.ecommerceFee);       // R$ fixo por item
+  const weightG        = getVal(fields.weight);          // gramas
+  const filamentPerKg  = getVal(fields.filamentCost);    // R$/kg
+  const failRate       = getVal(fields.failRate) / 100;  // fração
+  const printTime      = getVal(fields.printTime);       // horas
+  const energyPerHour  = getVal(fields.energyCost);      // R$/h
+  const printerValue   = getVal(fields.printerCost);     // R$
+  const printerLife    = getVal(fields.printerLifespan); // horas
+  const laborCost      = getVal(fields.laborCost);       // R$
+  const extraCost      = getVal(fields.extraCost);       // R$
+  const profitMargin   = getVal(fields.profitMargin) / 100; // fração
+  const quantity       = Math.max(1, Math.round(getVal(fields.quantity)));
+  const ecommerceTax   = getVal(fields.ecommerceTax) / 100; // fração (% sobre preço final)
+  const ecommerceFee   = getVal(fields.ecommerceFee);       // R$ fixo por item
 
   // ── Custo do material (por peça, sem considerar lote)
   // (peso em kg) × (custo por kg) × (1 + taxa de falha)
@@ -259,7 +259,7 @@ function calculate() {
   // ── Total para o lote (usando preço com e-commerce se houver, senão preço final)
   const hasEcommerce = ecommerceTax > 0 || ecommerceFee > 0;
   const pricePerUnit = hasEcommerce ? ecommercePrice : finalPrice;
-  const batchTotal = pricePerUnit * quantity;
+  const batchTotal   = pricePerUnit * quantity;
 
   return {
     materialCost,
@@ -287,7 +287,7 @@ function calculate() {
 /* ── 7. GRÁFICO (Chart.js) ────────────────────────────────────── */
 
 let chartInstance = null; // referência ao gráfico atual
-let lastResult = null; // último resultado calculado (para redesenho no toggle de tema)
+let lastResult    = null; // último resultado calculado (para redesenho no toggle de tema)
 
 /**
  * Cria ou atualiza o gráfico de rosca (doughnut)
@@ -301,17 +301,17 @@ function updateChart(result) {
   const textColor = isDark ? '#7b8098' : '#5a607a';
 
   // Dados para o gráfico (exclui itens zerados para não poluir)
-  const labels = [];
-  const data = [];
-  const colors = [];
+  const labels  = [];
+  const data    = [];
+  const colors  = [];
 
   const items = [
-    { label: 'Material', value: result.materialCost, color: '#f97316' },
-    { label: 'Energia', value: result.energyCostTotal, color: '#06b6d4' },
-    { label: 'Depreciação', value: result.depreciationCost, color: '#a78bfa' },
-    { label: 'Mão de obra', value: result.laborCost, color: '#34d399' },
-    { label: 'Adicionais', value: result.extraCost, color: '#fb923c' },
-    { label: 'E-commerce', value: result.ecommerceTotalCost, color: '#f472b6' },
+    { label: 'Material',        value: result.materialCost,      color: '#f97316' },
+    { label: 'Energia',         value: result.energyCostTotal,   color: '#06b6d4' },
+    { label: 'Depreciação',     value: result.depreciationCost,  color: '#a78bfa' },
+    { label: 'Mão de obra',     value: result.laborCost,         color: '#34d399' },
+    { label: 'Adicionais',      value: result.extraCost,         color: '#fb923c' },
+    { label: 'E-commerce',      value: result.ecommerceTotalCost,color: '#f472b6' },
   ];
 
   items.forEach(({ label, value, color }) => {
@@ -403,18 +403,18 @@ function displayResults(result) {
     : 'Resultado por peça';
 
   // Preenche métricas
-  els.resMaterial.textContent = formatBRL(result.materialCost);
-  els.resEnergy.textContent = formatBRL(result.energyCostTotal);
+  els.resMaterial.textContent     = formatBRL(result.materialCost);
+  els.resEnergy.textContent       = formatBRL(result.energyCostTotal);
   els.resDepreciation.textContent = formatBRL(result.depreciationCost);
-  els.resLabor.textContent = formatBRL(result.laborCost);
-  els.resExtra.textContent = formatBRL(result.extraCost);
-  els.resTotal.textContent = formatBRL(result.totalCost);
+  els.resLabor.textContent        = formatBRL(result.laborCost);
+  els.resExtra.textContent        = formatBRL(result.extraCost);
+  els.resTotal.textContent        = formatBRL(result.totalCost);
 
   // Preço final
   const marginPct = (result.profitMargin * 100).toFixed(0);
   els.finalPriceLabel.textContent = `Preço final (margem ${marginPct}%)`;
-  els.resFinal.textContent = formatBRL(result.finalPrice);
-  els.finalPriceSub.textContent = result.totalCost > 0
+  els.resFinal.textContent        = formatBRL(result.finalPrice);
+  els.finalPriceSub.textContent   = result.totalCost > 0
     ? `Lucro: ${formatBRL(result.finalPrice - result.totalCost)}`
     : '';
 
@@ -434,11 +434,11 @@ function displayResults(result) {
 
     const taxPct = (result.ecommerceTax * 100).toFixed(1);
     els.resEcommerceTaxLabel.textContent = `Imposto / comissão (${taxPct}%)`;
-    els.resEcommerceTax.textContent = formatBRL(result.ecommerceTaxAmount);
-    els.resEcommerceTotal.textContent = formatBRL(result.ecommerceTotalCost);
+    els.resEcommerceTax.textContent      = formatBRL(result.ecommerceTaxAmount);
+    els.resEcommerceTotal.textContent    = formatBRL(result.ecommerceTotalCost);
 
     els.resEcommercePrice.textContent = formatBRL(result.ecommercePrice);
-    els.resEcommerceSub.textContent =
+    els.resEcommerceSub.textContent   =
       `Lucro líquido após e-commerce: ${formatBRL(result.ecommercePrice - result.totalCost - result.ecommerceTotalCost)}`;
   } else {
     els.ecommerceBreakdown.hidden = true;
@@ -749,10 +749,10 @@ confirmSaveBtn.addEventListener('click', () => {
 // ─── Delegação de eventos na lista de presets ───────────────────
 
 presetList.addEventListener('click', (e) => {
-  const loadBtn = e.target.closest('.btn-preset-load');
+  const loadBtn   = e.target.closest('.btn-preset-load');
   const deleteBtn = e.target.closest('.btn-preset-delete');
 
-  if (loadBtn) loadPreset(loadBtn.dataset.id);
+  if (loadBtn)   loadPreset(loadBtn.dataset.id);
   if (deleteBtn) deletePreset(deleteBtn.dataset.id);
 });
 
@@ -766,6 +766,7 @@ loadLastBtn.addEventListener('click', () => {
 // ─── Render inicial ao carregar a página ────────────────────────
 renderPresets();
 
+
 /* ── 13. EXPORTAR PDF (jsPDF) ─────────────────────────────────── */
 
 exportBtn.addEventListener('click', exportPDF);
@@ -776,24 +777,63 @@ function exportPDF() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
 
-  const margin = 20;
-  const pageW = 210;
+  const margin   = 20;
+  const pageW    = 210;
   const contentW = pageW - margin * 2;
   let y = margin;
 
-  // ── Paleta de cores do PDF
+  // Paleta de cores do PDF
   const C = {
-    primary: [79, 110, 247],  // azul
-    dark: [18, 22, 34],    // fundo escuro (títulos)
-    text: [40, 45, 65],    // texto principal
-    muted: [120, 130, 160], // texto secundário
-    accent: [167, 139, 250], // roxo (preço final)
-    green: [52, 211, 153],
-    white: [255, 255, 255],
-    border: [220, 225, 240],
+    primary: [79, 110, 247],
+    dark:    [18, 22, 34],
+    text:    [40, 45, 65],
+    muted:   [120, 130, 160],
+    accent:  [167, 139, 250],  // roxo — preco sem e-commerce
+    pink:    [244, 114, 182],  // rosa  — e-commerce
+    green:   [52, 211, 153],
+    white:   [255, 255, 255],
+    border:  [220, 225, 240],
   };
 
-  // ─── Cabeçalho
+  // Desestrutura TODOS os valores do ultimo resultado calculado
+  const {
+    materialCost,
+    energyCostTotal,
+    depreciationCost,
+    laborCost,
+    extraCost,
+    totalCost,          // soma dos custos de producao (sem lucro)
+    finalPrice,         // preco apos margem de lucro (SEM e-commerce)
+    hasEcommerce,
+    ecommerceFee,       // taxa fixa por item (R$)
+    ecommerceTax,       // imposto como fracao (ex: 0.18)
+    ecommerceTaxAmount, // imposto em R$ = finalPrice x ecommerceTax
+    ecommerceTotalCost, // ecommerceTaxAmount + ecommerceFee
+    ecommercePrice,     // preco final COM e-commerce = finalPrice + ecommerceTotalCost
+    batchTotal,         // total do lote (usa ecommercePrice se aplicavel)
+    profitMargin,       // margem como fracao (ex: 0.40)
+    quantity,
+  } = lastResult;
+
+  // Preco final a ser destacado no PDF:
+  //   Com e-commerce -> ecommercePrice (= finalPrice + taxas)
+  //   Sem e-commerce -> finalPrice
+  const priceFinal = hasEcommerce ? ecommercePrice : finalPrice;
+
+  // Lucro bruto (antes das taxas de plataforma)
+  const lucroBruto = finalPrice - totalCost;
+
+  // Lucro liquido = o que sobra depois de pagar producao E a plataforma
+  // As taxas de e-commerce sao custo do vendedor, nao do comprador
+  const lucroLiquido = hasEcommerce
+    ? finalPrice - totalCost - ecommerceTotalCost
+    : lucroBruto;
+
+  const f = fields; // atalho para os campos do formulario
+
+  // ================================================================
+  // CABECALHO
+  // ================================================================
   doc.setFillColor(...C.dark);
   doc.rect(0, 0, pageW, 38, 'F');
 
@@ -805,169 +845,258 @@ function exportPDF() {
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(...C.muted);
-  doc.text('Orçamento de Peça Impressa em 3D', margin, 26);
+  doc.text('Orcamento de Peca Impressa em 3D', margin, 26);
 
-  // Data
   const now = new Date().toLocaleString('pt-BR');
-  doc.text(`Emitido em: ${now}`, pageW - margin, 26, { align: 'right' });
+  doc.text('Emitido em: ' + now, pageW - margin, 26, { align: 'right' });
 
   y = 50;
 
-  // ─── Subtítulo de seção
-  function sectionTitle(text) {
+  // ================================================================
+  // HELPERS LOCAIS
+  // ================================================================
+
+  // Titulo de secao com linha separadora colorida
+  function sectionTitle(text, color) {
+    var col = color || C.primary;
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(9);
-    doc.setTextColor(...C.primary);
+    doc.setTextColor(col[0], col[1], col[2]);
     doc.text(text.toUpperCase(), margin, y);
-    doc.setDrawColor(...C.primary);
-    doc.setLineWidth(.3);
+    doc.setDrawColor(col[0], col[1], col[2]);
+    doc.setLineWidth(0.3);
     doc.line(margin, y + 1.5, pageW - margin, y + 1.5);
     y += 8;
   }
 
-  // ─── Linha de dado
-  function dataRow(label, value, highlight = false) {
-    doc.setFillColor(...C.border);
-    if (highlight) doc.setFillColor(235, 230, 254);
+  // Linha de dado com fundo zebrado e cores configuráveis
+  function dataRow(label, value, opts) {
+    var o = opts || {};
+    var fill       = o.fill       || C.border;
+    var labelColor = o.labelColor || C.text;
+    var valueColor = o.valueColor || C.text;
+
+    doc.setFillColor(fill[0], fill[1], fill[2]);
     doc.roundedRect(margin, y - 4.5, contentW, 8, 1, 1, 'F');
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(9);
-    doc.setTextColor(...C.text);
+    doc.setTextColor(labelColor[0], labelColor[1], labelColor[2]);
     doc.text(label, margin + 3, y);
 
     doc.setFont('helvetica', 'bold');
-    doc.setTextColor(highlight ? C.accent[0] : C.text[0], highlight ? C.accent[1] : C.text[1], highlight ? C.accent[2] : C.text[2]);
+    doc.setTextColor(valueColor[0], valueColor[1], valueColor[2]);
     doc.text(value, pageW - margin - 3, y, { align: 'right' });
 
     y += 10;
   }
 
-  // ─── Parâmetros de entrada
-  sectionTitle('Parâmetros da Impressão');
+  // Caixa de destaque grande para totais
+  function highlightBox(label, sublabel, value, opts) {
+    var o          = opts || {};
+    var fillColor  = o.fillColor   || [235, 230, 254];
+    var borderColor= o.borderColor || C.accent;
+    var textColor  = o.textColor   || C.accent;
+    var height     = o.height      || 24;
 
-  const {
-    materialCost, energyCostTotal, depreciationCost,
-    laborCost, extraCost, totalCost, finalPrice,
-    batchTotal, profitMargin, quantity,
-    hasEcommerce, ecommerceFee, ecommerceTax,
-    ecommerceTaxAmount, ecommerceTotalCost, ecommercePrice,
-  } = lastResult;
+    doc.setFillColor(fillColor[0], fillColor[1], fillColor[2]);
+    doc.roundedRect(margin, y - 6, contentW, height, 3, 3, 'F');
+    doc.setDrawColor(borderColor[0], borderColor[1], borderColor[2]);
+    doc.setLineWidth(0.5);
+    doc.roundedRect(margin, y - 6, contentW, height, 3, 3, 'S');
 
-  const f = fields; // atalho
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8);
+    doc.setTextColor(C.muted[0], C.muted[1], C.muted[2]);
+    doc.text(label, margin + 4, y + 0.5);
 
-  dataRow('Peso da peça', `${getVal(f.weight)} g`);
-  dataRow('Custo do filamento', `${formatBRL(getVal(f.filamentCost))} / kg`);
-  dataRow('Taxa de falha', `${getVal(f.failRate)} %`);
-  dataRow('Tempo de impressão', `${getVal(f.printTime)} h`);
-  dataRow('Custo de energia', `${formatBRL(getVal(f.energyCost))} / h`);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(18);
+    doc.setTextColor(textColor[0], textColor[1], textColor[2]);
+    doc.text(value, pageW - margin - 4, y + 10, { align: 'right' });
+
+    if (sublabel) {
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7.5);
+      doc.setTextColor(C.muted[0], C.muted[1], C.muted[2]);
+      doc.text(sublabel, margin + 4, y + 14);
+    }
+
+    y += height + 8;
+  }
+
+  // ================================================================
+  // SECAO 1 — PARAMETROS
+  // ================================================================
+  sectionTitle('Parametros da Impressao');
+  dataRow('Peso da peca',        getVal(f.weight) + ' g');
+  dataRow('Custo do filamento',  formatBRL(getVal(f.filamentCost)) + ' / kg');
+  dataRow('Taxa de falha',       getVal(f.failRate) + ' %');
+  dataRow('Tempo de impressao',  getVal(f.printTime) + ' h');
+  dataRow('Custo de energia',    formatBRL(getVal(f.energyCost)) + ' / h');
   dataRow('Valor da impressora', formatBRL(getVal(f.printerCost)));
-  dataRow('Vida útil estimada', `${getVal(f.printerLifespan)} h`);
-  dataRow('Mão de obra', formatBRL(getVal(f.laborCost)));
-  dataRow('Custos adicionais', formatBRL(getVal(f.extraCost)));
-  dataRow('Margem de lucro', `${getVal(f.profitMargin)} %`);
-  dataRow('Quantidade (lote)', `${quantity} un`);
+  dataRow('Vida util estimada',  getVal(f.printerLifespan) + ' h');
+  dataRow('Mao de obra',         formatBRL(getVal(f.laborCost)));
+  dataRow('Custos adicionais',   formatBRL(getVal(f.extraCost)));
+  dataRow('Margem de lucro',     getVal(f.profitMargin) + ' %');
+  dataRow('Quantidade (lote)',   quantity + ' un');
+  if (hasEcommerce) {
+    if (ecommerceTax > 0) dataRow('Imposto / comissao e-commerce', getVal(f.ecommerceTax) + ' %');
+    if (ecommerceFee > 0) dataRow('Taxa fixa por item (e-commerce)', formatBRL(ecommerceFee));
+  }
 
   y += 4;
 
-  // ─── Composição de custos
-  sectionTitle('Composição dos Custos (por peça)');
-  dataRow('Custo do material', formatBRL(materialCost));
-  dataRow('Custo de energia', formatBRL(energyCostTotal));
-  dataRow('Depreciação do equip.', formatBRL(depreciationCost));
-  dataRow('Mão de obra', formatBRL(laborCost));
-  dataRow('Custos adicionais', formatBRL(extraCost));
+  // ================================================================
+  // SECAO 2 — COMPOSICAO DE CUSTOS DE PRODUCAO
+  // ================================================================
+  sectionTitle('Composicao dos Custos de Producao (por peca)');
+  dataRow('Material',              formatBRL(materialCost));
+  dataRow('Energia',               formatBRL(energyCostTotal));
+  dataRow('Depreciacao do equip.', formatBRL(depreciationCost));
+  dataRow('Mao de obra',           formatBRL(laborCost));
+  dataRow('Adicionais',            formatBRL(extraCost));
 
   y += 2;
 
-  // ─── Totais
-  // Custo total (destaque verde sutil)
+  // Custo total de producao (verde)
   doc.setFillColor(220, 252, 231);
   doc.roundedRect(margin, y - 4.5, contentW, 8, 1, 1, 'F');
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(10);
-  doc.setTextColor(...C.text);
-  doc.text('Custo total', margin + 3, y);
-  doc.setTextColor(...C.green);
+  doc.setFontSize(9);
+  doc.setTextColor(C.text[0], C.text[1], C.text[2]);
+  doc.text('Custo total de producao', margin + 3, y);
+  doc.setTextColor(C.green[0], C.green[1], C.green[2]);
   doc.text(formatBRL(totalCost), pageW - margin - 3, y, { align: 'right' });
   y += 14;
 
-  // Preço final — caixa de destaque
-  doc.setFillColor(235, 230, 254);
-  doc.roundedRect(margin, y - 6, contentW, 16, 3, 3, 'F');
-  doc.setDrawColor(...C.accent);
-  doc.setLineWidth(.5);
-  doc.roundedRect(margin, y - 6, contentW, 16, 3, 3, 'S');
+  // ================================================================
+  // SECAO 3 — FORMACAO DO PRECO DE VENDA
+  // Mostra a "escada": Custo -> +Lucro -> +E-commerce -> Preco final
+  // ================================================================
+  sectionTitle('Formacao do Preco de Venda (por peca)');
 
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(9);
-  doc.setTextColor(...C.muted);
-  doc.text(`PREÇO FINAL (margem ${(profitMargin * 100).toFixed(0)}%)`, margin + 4, y + 0.5);
+  // Custo de producao (referencia, em cinza)
+  dataRow('Custo de producao', formatBRL(totalCost),
+    { labelColor: C.muted, valueColor: C.muted });
 
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(16);
-  doc.setTextColor(...C.accent);
-  doc.text(formatBRL(finalPrice), pageW - margin - 4, y + 7, { align: 'right' });
-  y += 22;
+  // (+) Margem de lucro
+  dataRow(
+    '(+) Margem de lucro — ' + (profitMargin * 100).toFixed(0) + '% sobre custo',
+    '+ ' + formatBRL(finalPrice - totalCost),
+    { valueColor: C.green }
+  );
 
-  // ─── E-commerce (se aplicável)
+  // Subtotal com lucro (antes do e-commerce)
+  dataRow(
+    'Subtotal com lucro (sem taxas de plataforma)',
+    formatBRL(finalPrice),
+    { fill: [230, 235, 255], valueColor: C.primary }
+  );
+
+  // ================================================================
+  // TAXAS DE E-COMMERCE (so aparece se preenchido)
+  // ================================================================
   if (hasEcommerce) {
-    const pink = [244, 114, 182];
-    sectionTitle('Custos de E-commerce');
+    y += 4;
+    sectionTitle('Taxas de E-commerce', C.pink);
 
-    dataRow(`Taxa por item`, formatBRL(ecommerceFee));
-    dataRow(`Imposto / comissão (${(ecommerceTax * 100).toFixed(1)}%)`, formatBRL(ecommerceTaxAmount));
-    dataRow('Total e-commerce', formatBRL(ecommerceTotalCost));
+    if (ecommerceFee > 0) {
+      dataRow(
+        '(+) Taxa fixa por item',
+        '+ ' + formatBRL(ecommerceFee),
+        { valueColor: C.pink }
+      );
+    }
 
-    y += 2;
+    if (ecommerceTax > 0) {
+      dataRow(
+        '(+) Imposto / comissao — ' + (ecommerceTax * 100).toFixed(1) + '% sobre ' + formatBRL(finalPrice),
+        '+ ' + formatBRL(ecommerceTaxAmount),
+        { valueColor: C.pink }
+      );
+    }
 
-    // Preço para e-commerce — destaque rosa
+    // Total das taxas e-commerce
     doc.setFillColor(254, 226, 239);
-    doc.roundedRect(margin, y - 6, contentW, 16, 3, 3, 'F');
-    doc.setDrawColor(...pink);
-    doc.setLineWidth(.5);
-    doc.roundedRect(margin, y - 6, contentW, 16, 3, 3, 'S');
-
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(9);
-    doc.setTextColor(...C.muted);
-    doc.text('PREÇO PARA E-COMMERCE', margin + 4, y + 0.5);
-
+    doc.roundedRect(margin, y - 4.5, contentW, 8, 1, 1, 'F');
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(16);
-    doc.setTextColor(...pink);
-    doc.text(formatBRL(ecommercePrice), pageW - margin - 4, y + 7, { align: 'right' });
-    y += 22;
+    doc.setFontSize(9);
+    doc.setTextColor(C.text[0], C.text[1], C.text[2]);
+    doc.text('Total de taxas e-commerce', margin + 3, y);
+    doc.setTextColor(C.pink[0], C.pink[1], C.pink[2]);
+    doc.text('+ ' + formatBRL(ecommerceTotalCost), pageW - margin - 3, y, { align: 'right' });
+    y += 14;
   }
 
-  // Total do lote
+  // ================================================================
+  // CAIXA DE DESTAQUE — PRECO FINAL
+  //
+  // SEM e-commerce: exibe finalPrice (custo + lucro)
+  // COM e-commerce: exibe ecommercePrice = finalPrice + ecommerceTaxAmount + ecommerceFee
+  //
+  // O lucro liquido indica o que sobra apos pagar producao e plataforma.
+  // ================================================================
+  var finalLabel = hasEcommerce
+    ? 'PRECO FINAL (lucro + taxas e-commerce incluidas)'
+    : 'PRECO FINAL (margem ' + (profitMargin * 100).toFixed(0) + '%)';
+
+  var finalSublabel = hasEcommerce
+    ? 'Lucro liquido apos e-commerce: ' + formatBRL(lucroLiquido)
+    : 'Lucro: ' + formatBRL(lucroBruto);
+
+  highlightBox(
+    finalLabel,
+    finalSublabel,
+    formatBRL(priceFinal),
+    {
+      fillColor:   hasEcommerce ? [254, 226, 239] : [235, 230, 254],
+      borderColor: hasEcommerce ? C.pink          : C.accent,
+      textColor:   hasEcommerce ? C.pink          : C.accent,
+      height: 26,
+    }
+  );
+
+  // ================================================================
+  // TOTAL DO LOTE (so aparece quando qty > 1)
+  // batchTotal ja usa ecommercePrice se aplicavel
+  // ================================================================
   if (quantity > 1) {
-    doc.setFillColor(...C.dark);
-    doc.roundedRect(margin, y - 5, contentW, 11, 2, 2, 'F');
+    doc.setFillColor(C.dark[0], C.dark[1], C.dark[2]);
+    doc.roundedRect(margin, y - 5, contentW, 14, 2, 2, 'F');
+
     doc.setFont('helvetica', 'normal');
-    doc.setFontSize(9);
-    doc.setTextColor(...C.muted);
-    doc.text(`TOTAL DO LOTE (${quantity} peças)`, margin + 4, y + 1.5);
+    doc.setFontSize(8);
+    doc.setTextColor(C.muted[0], C.muted[1], C.muted[2]);
+    doc.text(
+      'TOTAL DO LOTE — ' + quantity + ' pecas x ' + formatBRL(priceFinal),
+      margin + 4, y + 1.5
+    );
+
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(12);
-    doc.setTextColor(...C.white);
-    doc.text(formatBRL(batchTotal), pageW - margin - 4, y + 2, { align: 'right' });
-    y += 16;
+    doc.setFontSize(13);
+    doc.setTextColor(C.white[0], C.white[1], C.white[2]);
+    doc.text(formatBRL(batchTotal), pageW - margin - 4, y + 6, { align: 'right' });
+    y += 20;
   }
 
-  // // ─── Rodapé
-  // y = 287;
-  // doc.setFillColor(...C.border);
-  // doc.rect(0, y - 3, pageW, 10, 'F');
-  // doc.setFont('helvetica', 'normal');
-  // doc.setFontSize(7);
-  // doc.setTextColor(...C.muted);
-  // doc.text('Gerado por Print3D Calc  •  Os valores são estimativas baseadas nos dados inseridos.', pageW / 2, y + 3, { align: 'center' });
+  // ================================================================
+  // RODAPE
+  // ================================================================
+  y = 287;
+  doc.setFillColor(C.border[0], C.border[1], C.border[2]);
+  doc.rect(0, y - 3, pageW, 10, 'F');
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(7);
+  doc.setTextColor(C.muted[0], C.muted[1], C.muted[2]);
+  doc.text(
+    'Gerado por i3DLab  -  Os valores sao estimativas baseadas nos dados inseridos.',
+    pageW / 2, y + 3, { align: 'center' }
+  );
 
-  // ─── Salva o arquivo
-  doc.save(`orcamento_3d_${Date.now()}.pdf`);
+  // Salva o arquivo
+  doc.save('orcamento_3d_' + Date.now() + '.pdf');
 }
-
 /* ── 14. INICIALIZAÇÃO ────────────────────────────────────────── */
 
 /**
